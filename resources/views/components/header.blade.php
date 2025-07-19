@@ -5,7 +5,7 @@
               <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Logo_Kementerian_Perhubungan_Indonesia_%28Kemenhub%29.png"
                   alt="Logo" class="h-10 md:h-14 mr-3" />
               <div>
-                  <h1 class="text-lg md:text-2xl font-bold leading-tight">Kantor Kesyahbandaran dan Otoritas Pelabuhan
+                  <h1 class="text-md md:text-xl font-bold leading-tight">Kantor Kesyahbandaran dan Otoritas Pelabuhan
                       Utama Makassar</h1>
                   <p class="text-sm text-blue-200">Pelayanan</p>
               </div>
@@ -21,7 +21,7 @@
               <a href="#home" class="hover:text-blue-300">Beranda</a>
               <a href="#pelayanan" class="hover:text-blue-300">Pelayanan</a>
               <a href="#kontak" class="hover:text-blue-300">Kontak</a>
-              <a href="javascript:void(0)" onclick="toggleLoginModal()" class="hover:text-blue-300">Login</a>
+              {{-- <a href="javascript:void(0)" onclick="toggleLoginModal()" class="hover:text-blue-300">Login</a> --}}
           </nav>
       </div>
 
@@ -31,13 +31,13 @@
               <a href="#home" class="hover:text-blue-300">Beranda</a>
               <a href="#pelayanan" class="hover:text-blue-300">Pelayanan</a>
               <a href="#kontak" class="hover:text-blue-300">Kontak</a>
-              <a href="javascript:void(0)" onclick="toggleLoginModal()" class="hover:text-blue-300">Login</a>
+              {{-- <a href="javascript:void(0)" onclick="toggleLoginModal()" class="hover:text-blue-300">Login</a> --}}
           </nav>
       </div>
   </header>
 
-  <!-- Modal Login -->
-  <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+  <!-- Modal Login TIDAK LAGI DIGUNAKAN-->
+  {{-- <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
       <div class="bg-white w-full max-w-sm rounded-lg shadow-lg p-6 relative">
           <!-- Close button -->
           <button onclick="toggleLoginModal()"
@@ -68,4 +68,4 @@
               </div>
           </form>
       </div>
-  </div>
+  </div> --}}
