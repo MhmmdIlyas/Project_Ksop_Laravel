@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Dashboard Admin - Kantor Kesyahbandaran dan Otoritas Pelabuhan Utama Makassar </title>
+    <title>Dashboard Admin - Kantor Kesyahbandaran dan Otoritas Pelabuhan Utama Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
-    <script src="https://cdn.tiny.cloud/1/YOUR_TINYMCE_API_KEY/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 
 <body>
@@ -36,28 +38,28 @@
     <main class="container mx-auto px-4 py-8">
         <h2 class="text-3xl font-bold text-center text-blue-800 mb-8">Manajemen Pelayanan</h2>
 
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-                role="alert">
-                <strong class="font-bold">Sukses!</strong>
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
+        {{-- notifikasi sukses --}}
+        <div id="success-notification"
+            class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50 transition-opacity duration-300 ease-in-out opacity-0">
+            <strong class="font-bold">Sukses!</strong> <span id="notification-message"></span>
+            <button class="ml-4 text-white text-lg font-bold"
+                onclick="this.parentNode.classList.add('hidden'); this.parentNode.classList.remove('opacity-100');">&times;</button>
+        </div>
 
         <div class="overflow-x-auto bg-white shadow-md rounded-lg p-6">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3 md:w-auto">
                             Nama Layanan
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/3 md:w-auto">
                             Deskripsi Singkat
                         </th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Edit</span>
+                            <span class="sr-only font-bold">Aksi</span>
                         </th>
                     </tr>
                 </thead>
@@ -77,7 +79,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <button
                                     onclick="openEditModal('{{ $layanan->name }}', '{{ $layanan->slug }}', `{{ addslashes($layanan->content) }}`)"
-                                    class="text-indigo-600 hover:text-indigo-900">Edit Konten</button>
+                                    class="text-indigo-600 hover:text-indigo-900 block text-center w-full py-2 px-4 border border-indigo-600 rounded-md">Edit
+                                    Layanan</button>
                             </td>
                         </tr>
                     @endforeach
@@ -91,7 +94,7 @@
         <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto w-full relative">
             <button onclick="closeEditModal()"
                 class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-            <h2 class="text-2xl font-bold mb-4" id="edit-modal-title">Edit Konten Layanan: <span
+            <h2 class="text-2xl font-bold mb-4" id="edit-modal-title">Edit Layanan: <span
                     id="current-service-name"></span></h2>
             <form id="edit-form" method="POST" action="">
                 @csrf
@@ -118,36 +121,53 @@
     </div>
 
     <script>
-        // Inisialisasi TinyMCE
-        tinymce.init({
-            selector: '#modal-edit-content',
-            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak nonbreaking anchor codesample fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            height: 400,
-            setup: function(editor) {
-                editor.on('change', function() {
-                    tinymce.triggerSave();
-                });
-            }
+        $(document).ready(function() {
+            // Inisialisasi Summernote
+            $('#modal-edit-content').summernote({
+                placeholder: 'Tulis konten layanan di sini...',
+                tabsize: 2,
+                height: 300, // Tinggi editor
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'hr']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+
+            // Periksa apakah ada pesan sukses dari sesi
+            @if (session('success'))
+                const notification = $('#success-notification');
+                const message = '{{ session('success') }}';
+                $('#notification-message').text(message);
+                notification.removeClass('hidden').addClass('opacity-100');
+
+                setTimeout(function() {
+                    notification.removeClass('opacity-100').addClass('hidden');
+                }, 5000); // Notifikasi akan hilang setelah 5 detik
+            @endif
         });
 
         function openEditModal(serviceName, serviceSlug, serviceContent) {
             const modal = document.getElementById("edit-service-modal");
             document.getElementById("current-service-name").innerText = serviceName;
 
-            // Inisialisasi TinyMCE dengan konten yang ada
-            tinymce.get('modal-edit-content').setContent(serviceContent);
+            // Mengatur konten Summernote
+            $('#modal-edit-content').summernote('code', serviceContent);
 
             const form = document.getElementById("edit-form");
-            form.action = `/admin/layanan/${serviceSlug}`; // Sesuaikan dengan rute Anda
+            form.action = `/admin/layanan/${serviceSlug}`;
 
             modal.classList.remove("hidden");
-            document.body.style.overflow = "hidden"; // Mencegah scroll di background
+            document.body.style.overflow = "hidden";
         }
 
         function closeEditModal() {
             document.getElementById("edit-service-modal").classList.add("hidden");
             document.body.style.overflow = "auto";
+            // Opsional: Kosongkan editor Summernote saat modal ditutup
+            // $('#modal-edit-content').summernote('code', '');
         }
     </script>
 </body>

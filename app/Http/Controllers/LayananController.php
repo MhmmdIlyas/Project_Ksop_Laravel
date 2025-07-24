@@ -37,7 +37,7 @@ class LayananController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Konten layanan berhasil diperbarui!');
+        return redirect()->route('dashboard')->with('Berhasil', 'Manajemen layanan berhasil diperbarui!');
     }
 
     /**

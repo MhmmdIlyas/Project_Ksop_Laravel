@@ -10,7 +10,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Jalankan seeder admin
-        $this->call(AdminSeeder::class);
+        $this->call([
+        AdminSeeder::class,
+        LayananSeeder::class,
+       ]);
 
         // Optional: data dummy user
         User::factory()->create([

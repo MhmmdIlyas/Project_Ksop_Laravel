@@ -26,9 +26,9 @@
       </div>
 
       <!-- Menu Mobile -->
-      <div id="mobile-menu" class="md:hidden hidden bg-blue-800 px-4 pb-4">
+      <div id="mobile-menu" class="md:hidden hidden bg-blue-800 px-6 pb-6">
           <nav class="flex flex-col space-y-2 text-white font-medium">
-              <a href="#home" class="hover:text-blue-300">Beranda</a>
+              <a href="#home" class="hover:text-blue-300 mt-4">Beranda</a>
               <a href="#pelayanan" class="hover:text-blue-300">Pelayanan</a>
               <a href="#kontak" class="hover:text-blue-300">Kontak</a>
               {{-- <a href="javascript:void(0)" onclick="toggleLoginModal()" class="hover:text-blue-300">Login</a> --}}
